@@ -3,6 +3,7 @@ __pycache__
 .vscode
 c8y.properties
 c8yAgent.log
+certs/
 *.crt
 *.key
 *.pem
