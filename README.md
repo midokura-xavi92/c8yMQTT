@@ -94,7 +94,15 @@ If that is the case either you have to delete the device and re-register or crea
 When in pi.properties the cert_auth flag is enabled and the corresponding root cert is active in the tenant and  auto registration is enabled for the root cert ->  The device is automatically created in the platform. You have to make sure that the externalId of the device (e.g. /cat/proc/cpuinfo) matches the common name of the client_cert.
 If cert_auth is enabled the agent also pulls the bearere token from the platfrom to use it in rest requests. This is implementedd in the software download feature. You cannot mix the two authentication methods. If you wold like to switch you have to delete the device credentials in the platform first.
 
-__c8y.properties__  
+You may use the `gen_certs.sh` script to create a simple self-signed chain, that contains a CA key-certificate pair, and client key-cert pairs (for the devices). The keys have no passphrase.
+
+In order to generate a client pair for a new device, simply add the identifier as an argument to the script invocation:
+
+    sh gen_certs.sh <identifier>
+
+and heed the instructions at the prompt.
+
+__c8y.properties__
 After successful registration c8yMQTT will create and store the device credentials file c8y.properties in the same directory as the class. It can be created to provide manual credentials. Remove this file in order to initiate a new auto registration process.
 
 [credentials]  

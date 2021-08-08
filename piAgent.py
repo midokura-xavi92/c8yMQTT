@@ -84,13 +84,13 @@ def gethardware():
 
 
 def serviceRestart(cause):
-    c8y.logger.info("Service Restart due to: " + cause )
-    os.system('sudo service c8y restart')
-        
+    c8y.logger.info("Would Service Restart due to: " + cause)
+    print("sudo service c8y restart")
+
 
 def reboot(cause):
-    c8y.logger.info("Rebooting due to: " + cause )
-    os.system('sudo reboot')
+    c8y.logger.info("Would Rebooting due to: " + cause)
+    print("sudo reboot")
 
 
 def sendCPULoad():
@@ -385,13 +385,16 @@ def updateConfig(message):
 
 
 def runAgent():
-    # Enter Device specific values
+
     stopEvent.clear()
+
+    # Enter Device specific values
     if c8y.initialized == False:
         c8y.bootstrap(config.get("device", "bootstrap_pwd"))
     if c8y.initialized == False:
         c8y.logger.info("Could not register. Exiting.")
         exit()
+
     ## Connect Agent Startup
     connected = c8y.connect(on_message_startup, config.get("device", "subscribe"))
     c8y.logger.info("Connection Result:" + str(connected))
@@ -399,9 +402,11 @@ def runAgent():
         c8y.reset()
         serviceRestart("Invalid credentials. Resetting!!!")
         exit()
+
     if connected != 0:
         serviceRestart("Connection Error: " + str(connected) + " restarting.")
         exit()
+
     c8y.initDevice(
         config.get("device", "name") + "-" + c8y.clientId,
         config.get("device", "devicetype"),
@@ -411,6 +416,7 @@ def runAgent():
         config.get("device", "operations"),
         config.get("device", "requiredinterval"),
     )
+
     ### Get Pending Operations
     c8y.publish("s/us", "114," + config.get("device", "operations"))
 
@@ -456,13 +462,18 @@ def runAgent():
     sendThread.start()
 
 
+########################
+###                  ###
+### High level logic ###
+###                  ###
+########################
+
 stopEvent = threading.Event()
 
 ### Reading Config file
 config_file = "pi.properties"
 config = RawConfigParser()
 config.read(config_file)
-
 
 ### Initialize MQTT Module
 c8y = C8yMQTT(
