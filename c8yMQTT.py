@@ -236,7 +236,6 @@ class C8yMQTT(object):
                     certfile=self.client_cert,
                     keyfile=self.client_key,
                     tls_version=ssl.PROTOCOL_TLSv1_2,
-                    cert_reqs=ssl.CERT_NONE,
                 )
 
             else:
